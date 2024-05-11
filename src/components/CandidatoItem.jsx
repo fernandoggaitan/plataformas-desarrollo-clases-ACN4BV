@@ -1,18 +1,20 @@
 import { useState } from "react";
 
-export const CandidatoItem = ( {ID, nombre, apellido, imagen} ) => {
+export const CandidatoItem = ( {ID, nombre, apellido, imagen, initialVotos, onVotosChange} ) => {
 
-    const [votos, setVotos] = useState(0);
+    const [votos, setVotos] = useState(initialVotos);
 
     const votar = () => {
         const votos_suma = votos + 1;
         setVotos(votos_suma);
+        onVotosChange(ID, votos_suma);
     }
 
     const handleVotos = (e) => {
         const value = parseInt(e.target.value, 10);
         if(isNaN(value)) return;
         setVotos(value);
+        onVotosChange(ID, value);
     }
 
     return (

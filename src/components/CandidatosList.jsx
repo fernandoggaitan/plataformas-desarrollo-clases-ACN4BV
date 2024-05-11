@@ -1,12 +1,13 @@
 //Fuente de las imágenes: https://randomuser.me
 
+/*
 const lista = [
     {
         "ID": 1,
         "nombre": "Erin",
         "apellido": "Campbell",
         "imagen": "/img/personas/17.jpg",
-        "votos": 0
+        "votos": 3
     },
     {
         "ID": 2,
@@ -27,7 +28,7 @@ const lista = [
         "nombre": "Aramis",
         "apellido": "Gomes",
         "imagen": "/img/personas/49.jpg",
-        "votos": 0
+        "votos": 5
     },
     {
         "ID": 5,
@@ -65,24 +66,63 @@ const lista = [
         "votos": 0
     }
 ];
+*/
 
+import { useState, useEffect } from "react";
 import { CandidatoItem } from "./CandidatoItem"
 
 export const CandidatosList = () => {
 
+    const [candidatos, setCandidatos] = useState([]);
+
+    useEffect(() => {
+        getCandidatos();
+    }, []);
+
+    const getCandidatos = async() => {
+        const request = await fetch("https://randomuser.me/api/?results=10");
+        const json = await request.json();
+        const candidatos_temp = json.results.map((item, index) => {
+            return {
+                "ID": item.login.uuid,
+                "nombre": item.name.first,
+                "apellido": item.name.last,
+                "imagen": item.picture.large,
+                "votos": 0
+            }
+        });
+        setCandidatos(candidatos_temp);
+    }
+
+    const getCantVotos = () => {
+        return candidatos.reduce( (total, item) => (total + item.votos), 0 );
+    }
+
+    const emitCandidatos = (ID, votos) => {
+        const candidatos_temp = candidatos.map( (item) => {
+            if(item.ID == ID){
+                item.votos = votos;
+            }
+            return item;
+        });
+        setCandidatos(candidatos_temp);
+    }
+
     return (
         <>
             <h2> Votación </h2>
-            <p> Cantidad de votos: 0 </p>
+            <p> Cantidad de votos: { getCantVotos() } </p>
             <div className="row">
                 {
-                    lista.map( (item) => (
+                    candidatos.sort( (a, b) => b.votos - a.votos ).map( (item) => (
                         <CandidatoItem
                             key={item.ID}
                             ID={item.ID}
                             nombre={item.nombre}
                             apellido={item.apellido}
                             imagen={item.imagen}
+                            initialVotos={item.votos}
+                            onVotosChange={emitCandidatos}
                         />
                     ))
                 }
