@@ -1,86 +1,26 @@
-//Fuente de las imágenes: https://randomuser.me
-
-/*
-const lista = [
-    {
-        "ID": 1,
-        "nombre": "Erin",
-        "apellido": "Campbell",
-        "imagen": "/img/personas/17.jpg",
-        "votos": 3
-    },
-    {
-        "ID": 2,
-        "nombre": "Inaya",
-        "apellido": "Guillaume",
-        "imagen": "/img/personas/90.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 3,
-        "nombre": "Praneetha",
-        "apellido": "Kaur",
-        "imagen": "/img/personas/61.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 4,
-        "nombre": "Aramis",
-        "apellido": "Gomes",
-        "imagen": "/img/personas/49.jpg",
-        "votos": 5
-    },
-    {
-        "ID": 5,
-        "nombre": "Frederik",
-        "apellido": "Lervåg",
-        "imagen": "/img/personas/52.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 6,
-        "nombre": "Jill",
-        "apellido": "Garrett",
-        "imagen": "/img/personas/37.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 7,
-        "nombre": "Sophie",
-        "apellido": "Clarke",
-        "imagen": "/img/personas/73.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 8,
-        "nombre": "Yasemin",
-        "apellido": "Akman",
-        "imagen": "/img/personas/8.jpg",
-        "votos": 0
-    },
-    {
-        "ID": 9,
-        "nombre": "Stach",
-        "apellido": "Noijen",
-        "imagen": "/img/personas/3.jpg",
-        "votos": 0
-    }
-];
-*/
-
 import { useState, useEffect } from "react";
-import { CandidatoItem } from "./CandidatoItem"
+import { CandidatoItem } from "../components/CandidatoItem"
+
+import { useParams } from "react-router-dom";
 
 export const CandidatosList = () => {
 
     const [candidatos, setCandidatos] = useState([]);
+    const {gender} = useParams();
 
     useEffect(() => {
         getCandidatos();
-    }, []);
+    }, [gender]);
 
     const getCandidatos = async() => {
-        const request = await fetch("https://randomuser.me/api/?results=10");
+
+        let url = "https://randomuser.me/api/?results=10";
+
+        if(gender != undefined){
+            url += "&gender=" + gender;
+        }
+
+        const request = await fetch(url);
         const json = await request.json();
         const candidatos_temp = json.results.map((item, index) => {
             return {
