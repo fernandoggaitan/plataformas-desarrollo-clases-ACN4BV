@@ -14,6 +14,7 @@ import { Menu } from './components/Menu'
 
 //Contextos
 import { AuthProvider } from './context/AuthContext'
+import { ProtectedRoute } from './context/ProtectedRoute'
 
 export const App = () => {
 
@@ -28,7 +29,11 @@ export const App = () => {
             <Route path='/candidatos/:gender' element={<CandidatosList />} />
             <Route path='/contacto' element={<Contacto />} />
             <Route path='/login' element={<Login />} />
-            <Route path='/dashboard' element={<Dashboard />} />
+            <Route path='/dashboard' element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            } />
           </Routes>
         </div>
       </BrowserRouter>

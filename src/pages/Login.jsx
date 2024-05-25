@@ -8,7 +8,7 @@ export const Login = () => {
 
     const handlerLogin = () => {
         login();
-        navigate("/dashboard")
+        navigate("/dashboard");
     }
 
     return (
