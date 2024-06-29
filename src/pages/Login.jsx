@@ -20,7 +20,7 @@ export const Login = () => {
                 contrasena
             });
             if(request.data.success){
-                login(request.data.accessToken);
+                login(request.data);
                 navigate("/dashboard");
             }
             alert(request.data.message);
